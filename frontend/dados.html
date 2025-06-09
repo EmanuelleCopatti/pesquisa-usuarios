@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detalhes do Usuário</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 40px;
+        background-color: #f5f5f5;
+      }
+
+      h1 {
+        color: #1976d2;
+      }
+
+      .card {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: left;
+      }
+
+      .label {
+        font-weight: bold;
+        color: #333;
+      }
+
+      .value {
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Detalhes do Usuário</h1>
+    <div id="detalhes" class="card">
+      <p>Carregando...</p>
+    </div>
+
+    <script>
+      async function carregarUsuario() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        if (!id) {
+          document.getElementById('detalhes').innerHTML = '<p>ID não informado.</p>';
+          return;
+        }
+
+        try {
+          const res = await fetch(`http://localhost:3001/usuarios/${id}`);
+          if (!res.ok) throw new Error('Usuário não encontrado');
+
+          const user = await res.json();
+
+          const html = `
+            <div class="value"><span class="label">ID:</span> ${user.id}</div>
+            <div class="value"><span class="label">Nome:</span> ${user.nome}</div>
+            <div class="value"><span class="label">Idade:</span> ${user.idade}</div>
+            <div class="value"><span class="label">Email:</span> ${user.email}</div>
+            <div class="value"><span class="label">Endereço:</span> ${user.endereco}</div>
+            <div class="value"><span class="label">Profissão:</span> ${user.profissao}</div>
+          `;
+
+          document.getElementById('detalhes').innerHTML = html;
+        } catch (error) {
+          document.getElementById('detalhes').innerHTML = '<p>Erro ao carregar dados do usuário.</p>';
+        }
+      }
+
+      window.onload = carregarUsuario;
+    </script>
+  </body>
+</html>
+
+//....
+//....

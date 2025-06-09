@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prova - Rotas e API</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 40px;
+        background-color: #f5f5f5;
+      }
+
+      h1 {
+        color: #1976d2;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        max-width: 400px;
+        margin: 20px auto;
+        text-align: left;
+      }
+
+      li {
+        background-color: white;
+        margin-bottom: 10px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 1px solid #1976d2;
+        transition: background-color 0.2s ease;
+      }
+
+      li:hover {
+        background-color: #e3f2fd;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lista de usuários</h1>
+    <ul id="lista-usuarios">
+      <!-- Usuários serão inseridos aqui -->
+    </ul>
+
+    <script>
+      // Função para carregar usuários da API
+      async function carregarUsuarios() {
+        try {
+          const res = await fetch('http://localhost:3001/usuarios');
+          if (!res.ok) throw new Error('Erro ao buscar usuários');
+
+          const usuarios = await res.json();
+
+          const lista = document.getElementById('lista-usuarios');
+          lista.innerHTML = ''; // limpa lista
+
+          usuarios.forEach(user => {
+            const li = document.createElement('li');
+            li.textContent = `${user.nome} | ${user.email}`;
+            
+            // Ao clicar, abre nova aba com detalhes do usuário
+            li.addEventListener('click', () => {
+                window.open(`/dados.html?id=${user.id}`, '_blank');
+            });
+
+            lista.appendChild(li);
+          });
+        } catch (error) {
+          alert('Erro ao carregar usuários: ' + error.message);
+        }
+      }
+
+      // Chama a função quando a página carregar
+      window.onload = carregarUsuarios;
+    </script>
+  </body>
+</html>
+//.....
+//.....
